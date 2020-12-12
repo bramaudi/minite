@@ -1,0 +1,13 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "snowpack dev --open none",
+    "build": "snowpack build --clean"
+  },
+  "devDependencies": {
+    "snowpack": "^3.0.0-rc.2"
+  }
+}
