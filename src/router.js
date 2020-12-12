@@ -96,7 +96,6 @@ export class Router {
         const content = route.cb.apply()
         if (typeof content.then === 'function') {
           content.then(res => {
-            console.log(res.default.apply());
             app.appendChild(res.default.apply())
           })
         } else {
