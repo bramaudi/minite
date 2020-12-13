@@ -1,18 +1,21 @@
 const Home = () => {
+
+  const data = { count: 0 }
+
+  const handler = {
+    increment (app) {
+      app.data.count += 1
+      app.render()
+    },
+    decrement (app) {
+      app.data.count -= 1
+      app.render()
+    }
+  }
+
   return {
-    data: {
-      count: 0
-    },
-    handler: {
-      increment (app) {
-        app.data.count += 1
-        app.render()
-      },
-      decrement (app) {
-        app.data.count -= 1
-        app.render()
-      }
-    },
+    data,
+    handler,
     view: (app) => (
       <>
         <a href="/#!/">&laquo; Home</a>
