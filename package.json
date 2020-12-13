@@ -7,14 +7,16 @@
     "dev": "snowpack dev --open none",
     "build": "snowpack build --clean"
   },
+  "browserslist": ">0.75%, not ie 11, not UCAndroid >0, not OperaMini all",
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@snowpack/plugin-babel": "^2.1.5",
     "snowpack": "^3.0.0-rc.2"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
-    "@babel/plugin-transform-react-jsx": "^7.12.10"
+    "@babel/plugin-transform-react-jsx": "^7.12.10",
+    "@snowpack/plugin-babel": "^2.1.5",
+    "@snowpack/plugin-webpack": "^2.2.0"
   }
 }

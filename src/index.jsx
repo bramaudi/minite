@@ -1,19 +1,18 @@
-import Tempe from './tempe.js'
+import Tempe from 'tempe'
+import Layout from '@/components/layout'
+import Home from './views/home'
 
 const routes = [
   {
     path: '/counter',
-    component: () => import('./views/counter.jsx')
+    component: () => import('@/views/counter.jsx'),
+    layout: Layout
   },
   {
     path: '',
-    component: () => (
-      <h1>Home</h1>
-    )
+    component: () => Home,
+    layout: Layout
   }
 ]
 
-window.app = new Tempe({
-  el: '#app',
-  routes
-})
+Tempe.router({ routes })

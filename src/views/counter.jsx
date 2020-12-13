@@ -1,8 +1,6 @@
-import store from '../models/counter.js'
+import store from '@/models/counter.js'
 
 const Counter = () => {
-  
-  store.init(Counter)
 
   const increment = () => {
     store.set({
@@ -20,10 +18,10 @@ const Counter = () => {
     <>
       <h1>Counter</h1>
       <div>Count: {store.state.count}</div>
-      <button onClick={() => increment()}>+1</button>
-      <button onClick={() => decrement()}>-1</button>
+      <button onClick={increment}>+1</button>
+      <button onClick={decrement}>-1</button>
     </>
   )
 }
 
-export default Counter
+export default store.mount(Counter)

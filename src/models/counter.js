@@ -1,7 +1,7 @@
-import Store from '../store.js'
+import Tempe from 'tempe'
 
 const state = {
   count: 0
 }
 
-export default Store(state)
+export default Tempe.store(state)
