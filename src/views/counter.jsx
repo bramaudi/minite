@@ -1,27 +1,28 @@
-import store from '@/models/counter.js'
-
-const Counter = () => {
-
-  const increment = () => {
-    store.set({
-      count: store.state.count += 1
-    })
+const Home = () => {
+  return {
+    data: {
+      count: 0
+    },
+    handler: {
+      increment (app) {
+        app.data.count += 1
+        app.render()
+      },
+      decrement (app) {
+        app.data.count -= 1
+        app.render()
+      }
+    },
+    view: (app) => (
+      <>
+        <a href="/#!/">&laquo; Home</a>
+        <h1>Counter</h1>
+        <p>Count: {app.data.count}</p>
+        <button onClick={() => app.handler.increment(app)}>+</button>
+        <button onClick={() => app.handler.decrement(app)}>-</button>
+      </>
+    )
   }
-
-  const decrement = () => {
-    store.set({
-      count: store.state.count -= 1
-    })
-  }
-
-  return (
-    <>
-      <h1>Counter</h1>
-      <div>Count: {store.state.count}</div>
-      <button onClick={increment}>+1</button>
-      <button onClick={decrement}>-1</button>
-    </>
-  )
 }
 
-export default store.mount(Counter)
+export default Home

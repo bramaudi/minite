@@ -1,105 +1,63 @@
-export const Tempe = {
-  /**
-   * Mount component into the DOM
-   * @param {string} child - CSS Selector
-   */
-  mount ({ layout, component }) {
-    document.body.textContent = ''
-    component = component.apply()
-    if (typeof component.then === 'function') {
-      component.then(res => {
-        const view = typeof res.default === 'function'
-          ? res.default.apply()
-          : res.default
-        this.append(layout ? layout(view) : view)
-      })
-    } else {
-      this.append(layout ? layout(component) : component)
-    }
-  },
-  append (view) {
-    view = Array.isArray(view) ? view : [view]
-    document.body.append(...view)
-  },
+var handler = function () {
+	return {
+		get: function (obj, prop) {
+			console.log('got it!');
+			if (['[object Object]', '[object Array]'].indexOf(Object.prototype.toString.call(obj[prop])) > -1) {
+				return new Proxy(obj[prop], handler());
+			}
+			return obj[prop];
+		},
+		set: function (obj, prop, value) {
+			console.log('set it');
+			obj[prop] = value;
+			return true;
+		},
+		deleteProperty: function (obj, prop) {
+			console.log('delete it');
+			delete obj[prop];
+			return true;
+		}
+	};
+};
 
-  /**
-   * Remount given component
-   * @param {} component
-   */
-  remount (component) {
-    document.body.textContent = ''
-    document.body.append(...component.apply())
-  },
+export class Tempe {
 
-  /**
-   * Setup router
-   * @param {Object} c - Config
-   */
-  router (c) {
-    new Router(c.routes)
-    return c.routes
-  },
-
-  /**
-   * Store for data reactivity
-   * @param {any} state
-   */
-  store: (state) => ({
-    state,
-    component: null,
-    mount (component) {
-      this.component = component
-      return this.component
-    },
-    set (val) {
-      this.state = val
-      Tempe.remount(this.component)
-    }
-  }),
-
-  /**
-   * DOM Create Element
-   * @param {HTMLElementTagNameMap} tagName 
-   * @param {Object} attrs 
-   * @param  {...any} children 
-   */
-  m (tagName, attrs, ...children) {
-    if (tagName === 'fragment') return children
-
-    if (Array.isArray(attrs)) children = attrs
-    else if (typeof attrs === 'string') children.push(attrs)
-  
-    // lowercase-ing object key, onClick -> onclick
-    if (typeof attrs === 'object') {
-      for (const key in attrs) {
-        attrs[key.toLocaleLowerCase()] = attrs[key]
-      }
-    }
-  
-    // Mass assign attributes
-    const elem = Object.assign(
-      document.createElement(tagName),
-      typeof attrs === 'object' ? attrs : {}
-    )
-  
-    for (const child of children) {
-      if (Array.isArray(child)) elem.append(...child)
-      else elem.append(child)
-    }
-  
-    return elem
+  constructor (options) {
+    this.el = document.querySelector(options.el)
+    this.data = new Proxy(options.data || {}, handler())
+    this.handler = options.handler
+    this.view = options.view
   }
+
 }
+
+Tempe.prototype.render = function () {
+  let view = this.view.apply({}, [this])
+  this.el.textContent = ''
+  this.el.append(...Array.isArray(view) ? view : [view])
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 export class Router {
   
   routes = []
 
-  constructor(routes) {
-    routes && routes.map(({ path, component, layout }) => {
+  constructor(options) {
+    options.routes && options.routes.map(({ path, component, layout }) => {
       this.add(path, component, layout)
     })
-
+    this.el = options.el
     this.listen()
   }
 
@@ -160,6 +118,17 @@ export class Router {
     this.interval = setInterval(this.interval, 50)
   }
 
+  mount (component) {
+    const { data, handler, view } = component
+    const app = new Tempe({
+      el: this.el,
+      data,
+      handler,
+      view
+    })  
+    app.render()
+  }
+
   interval = () => {
     if (this.current === this.getFragment()) return
     this.current = this.getFragment()
@@ -168,7 +137,14 @@ export class Router {
       const match = this.current.match(route.path)
       if (match) {
         match.shift()
-        Tempe.mount(route)
+        const component = route.component.apply()
+        if (typeof component.then === 'function') {
+          component.then(res => {
+            this.mount(res.default.apply())
+          })
+        } else {
+          this.mount(component)
+        }
         return match;
       }
       return false
@@ -177,6 +153,37 @@ export class Router {
 
 }
 
-window.m = Tempe.m
+/**
+ * DOM Create Element
+ * @param {HTMLElementTagNameMap} tagName 
+ * @param {Object} attrs 
+ * @param  {...any} children 
+ */
+window.m = function (tagName, attrs, ...children) {
+ if (tagName === 'fragment') return children
+
+ if (Array.isArray(attrs)) children = attrs
+ else if (typeof attrs === 'string') children.push(attrs)
+
+ // lowercase-ing object key, onClick -> onclick
+ if (typeof attrs === 'object') {
+   for (const key in attrs) {
+     attrs[key.toLocaleLowerCase()] = attrs[key]
+   }
+ }
+
+ // Mass assign attributes
+ const elem = Object.assign(
+   document.createElement(tagName),
+   typeof attrs === 'object' ? attrs : {}
+ )
+
+ for (const child of children) {
+   if (Array.isArray(child)) elem.append(...child)
+   else elem.append(child)
+ }
+
+ return elem
+}
 
 export default Tempe;

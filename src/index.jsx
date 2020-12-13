@@ -1,18 +1,20 @@
-import Tempe from 'tempe'
-import Layout from '@/components/layout'
+import { Router } from 'tempe'
 import Home from './views/home'
+// import Layout from '@/components/layout'
+// import Home from './views/home'
 
 const routes = [
   {
     path: '/counter',
-    component: () => import('@/views/counter.jsx'),
-    layout: Layout
+    component: () => import('@/views/counter.jsx')
   },
   {
     path: '',
-    component: () => Home,
-    layout: Layout
+    component: Home
   }
 ]
 
-Tempe.router({ routes })
+new Router({
+  el: '#app',
+  routes
+})
