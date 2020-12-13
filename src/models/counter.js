@@ -1,8 +1,7 @@
-import Store from '../state.js'
+import Store from '../store.js'
 
-export default {
-  ...Store,
-  state: {
-    count: 0
-  }
+const state = {
+  count: 0
 }
+
+export default Store(state)

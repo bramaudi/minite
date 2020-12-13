@@ -2,12 +2,9 @@ export class Tempe {
   
   routes = [];
   root = '/';
-  el = null
+  dom = document.body
 
   constructor(c = {}) {
-    const el = c.el || '#app'
-    this.el = document.querySelector(el)
-
     if (c.routes) {
       c.routes.map(({ path, component }) => {
         this.add(path, component)
@@ -24,9 +21,9 @@ export class Tempe {
    * @param {string} child - CSS Selector
    */
   mount = (child) => {
-    this.el.innerHTML = ''
-    if (Array.isArray(child)) this.el.append(...child)
-    else this.el.append(child)
+    this.dom.innerHTML = ''
+    if (Array.isArray(child)) this.dom.append(...child)
+    else this.dom.append(child)
   }
 
   getEl = () => {
@@ -38,8 +35,8 @@ export class Tempe {
    * @param {} component
    */
   remount = (component) => {
-    this.el.innerHTML = ''
-    this.el.append(...component.apply())
+    this.dom.innerHTML = ''
+    this.dom.append(...component.apply())
   }
 
   m = (tagName, attrs, ...children) => {

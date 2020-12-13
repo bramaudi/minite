@@ -1,13 +1,15 @@
-const Store = {
-  state: null,
+import Tempe from './tempe.js'
+
+const Store = (state) => ({
+  state,
   component: null,
   init (component) {
     this.component = component
   },
   set (val) {
     this.state = val
-    window.app.remount(this.component)
+    new Tempe().remount(this.component)
   }
-}
+})
 
 export default Store

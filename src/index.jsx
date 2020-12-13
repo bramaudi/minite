@@ -7,11 +7,9 @@ const routes = [
   },
   {
     path: '',
-    component: () => {
-      return (
-        <h1>Home</h1>
-      )
-    }
+    component: () => (
+      <h1>Home</h1>
+    )
   }
 ]
 
