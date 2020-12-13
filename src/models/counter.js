@@ -1,10 +1,8 @@
 import Store from '../state.js'
 
-const Counter = {
+export default {
   ...Store,
   state: {
     count: 0
   }
 }
-
-export default Counter

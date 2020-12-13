@@ -1,17 +1,21 @@
-import { m, Router } from './router.js'
+import Tempe from './tempe.js'
 
 const routes = [
   {
     path: '/counter',
-    component: () => import('./views/counter.js')
+    component: () => import('./views/counter.jsx')
   },
   {
     path: '',
     component: () => {
-      const h1 = m('h1', { id: 'asas' }, 'Home')
-      return h1
+      return (
+        <h1>Home</h1>
+      )
     }
   }
 ]
 
-new Router(routes)
+window.app = new Tempe({
+  el: '#app',
+  routes
+})

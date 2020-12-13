@@ -1,14 +1,12 @@
-import { remount } from './router.js'
-
 const Store = {
-  state: 0,
-  app: null,
-  init (app) {
-    this.app = app
+  state: null,
+  component: null,
+  init (component) {
+    this.component = component
   },
   set (val) {
     this.state = val
-    remount(this.app)
+    window.app.remount(this.component)
   }
 }
 
