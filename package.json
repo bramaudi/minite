@@ -1,0 +1,56 @@
+{
+  "name": "minite",
+  "version": "0.1.15",
+  "description": "A tiny (1kB minified) state-based UI javascript framework.",
+  "source": "src/index.js",
+  "main": "dist/minite.js",
+  "module": "dist/minite.module.js",
+  "unpkg": "dist/minite.umd.js",
+  "exports": {
+    ".": {
+      "browser": "./dist/minite.module.js",
+      "umd": "./dist/minite.umd.js",
+      "import": "./dist/minite.mjs",
+      "require": "./dist/minite.js"
+    },
+    "./router": {
+      "browser": "./router/dist/router.module.js",
+      "umd": "./router/dist/router.umd.js",
+      "require": "./router/dist/router.js",
+      "import": "./router/dist/router.mjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bramaudi/minite"
+  },
+  "author": "Brama Udi <bramaudi.al@gmail.com> (http://bramaudi.my.id)",
+  "license": "MIT",
+  "scripts": {
+    "dev": "microbundle watch",
+    "build": "npm-run-all --parallel build:*",
+    "build:core": "microbundle",
+    "build:router": "microbundle --cwd router --name router",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "mitt": "^2.1.0",
+    "microbundle": "^0.12.4",
+    "npm-run-all": "^4.1.5"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "jsx",
+    "ui",
+    "user interface",
+    "real dom",
+    "components",
+    "frontend",
+    "framework"
+  ],
+  "mangle": {
+    "regex": "^__"
+  }
+}

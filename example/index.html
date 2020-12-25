@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>minite.js</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../dist/minite.umd.js"></script>
+  <script>
+    const { m, render } = minite
+
+    const state = {
+      count: 0,
+      text: '',
+      show: false
+    }
+
+    // 'x' => Fragment -> return children
+    const Counter = ({ count, text, show }, set) => m('x', [
+      m('h1', 'Counter'),
+      m('button', {onclick: () => set('count', count - 1)}, '-'),
+      m('span', ` ${count} `),
+      m('button', {onclick: () => set('count', count + 1)}, '+'),
+
+      m('h1', 'Input'),
+      m('div', `Text: "${text}"`),
+      m('input', {
+        id: 'inputText',
+        value: text,
+        oninput: e => set('text', e.target.value)
+      }),
+
+      m('h1', 'Toggle'),
+      m('button', {onclick: () => set('show', !show)}, 'Show/Hide'),
+      show ? m('div', 'Hello there!') : ''
+    ])
+
+    const root = document.getElementById('app')
+    render(root, Counter, state)
+  </script>
+</body>
+</html>

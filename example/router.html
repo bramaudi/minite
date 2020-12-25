@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>minite.js test</title>
+</head>
+<body>
+  <nav>
+    <li><a href="#!/">Home</a></li>
+    <li><a href="#!/about">About</a></li>
+    <li><a href="#!/wkwk">404</a></li>
+  </nav>
+  <div id="app"></div>
+  <script src="../dist/minite.umd.js"></script>
+  <script src="../router/dist/router.umd.js"></script>
+  <script type="module">
+    import Home from './pages/home.js'
+
+    const Preload = () => m('h1', 'Loading ...')
+
+    const { m, render } = minite
+    
+    const r = new router({
+      render,
+      mount: '#app',
+      preloader: Preload
+    })
+
+    r.add('/', Home)
+    r.add('/about', () => import('./pages/about.js'))
+    r.add('', () => m('h1', '404'))
+    r.listen()
+  </script>
+</body>
+</html>
