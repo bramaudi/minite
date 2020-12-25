@@ -3,23 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>minite.js test</title>
+  <title>minite.js - router</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏳</text></svg>">
 </head>
 <body>
+  <a href="/">&laquo; Back</a>
   <nav>
     <li><a href="#!/">Home</a></li>
     <li><a href="#!/about">About</a></li>
     <li><a href="#!/wkwk">404</a></li>
   </nav>
   <div id="app"></div>
-  <script src="../dist/minite.umd.js"></script>
-  <script src="../router/dist/router.umd.js"></script>
+  <script src="https://unpkg.com/minite@0.1.16/dist/minite.umd.js"></script>
+  <script src="https://unpkg.com/minite@0.1.16/router/dist/router.umd.js"></script>
   <script type="module">
     import Home from './pages/home.js'
 
     const Preload = () => m('h1', 'Loading ...')
 
     const { m, render } = minite
+    window.m = m // accessible by imported component
     
     const r = new router({
       render,
