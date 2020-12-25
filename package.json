@@ -1,6 +1,6 @@
 {
   "name": "minite",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "A tiny (~1kB gzipped) state-based UI frontend library.",
   "source": "src/index.js",
   "main": "dist/minite.js",

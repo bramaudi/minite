@@ -1,6 +1,28 @@
-# minite.js
+# ⏳ minite.js
 
 Tiny Javascript library (only ~1kB gzipped) for create state-based UI component with simple *reactivity* mechanism with as simple as possible API, let you start in a *minite*.
+
+## Installtaion
+
+### Node JS
+
+```js
+import { m, render } from 'minite'
+// const { m, render } = require('minite')
+```
+
+### CDN
+
+HTML:
+```html
+<script src="https://unpkg.com/minite@0.1.16/dist/minite.umd.js"></script>
+```
+
+JavaScript:
+```js
+// "minite" instance available globally
+const { m, render } = minite
+```
 
 ## Quick Start
 
@@ -36,3 +58,8 @@ render(root, App, state)
 
 - [ ] Writing documentation
 - [ ] Adding more example
+
+### Credit
+
+- [real-dom](https://github.com/danculley/real-dom) - simple dom engine
+- [mitt](https://github.com/developit/mitt) - tiny event pubsub
