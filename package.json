@@ -1,7 +1,7 @@
 {
   "name": "minite",
   "version": "0.1.15",
-  "description": "A tiny (1kB minified) state-based UI javascript framework.",
+  "description": "A tiny (~1kB gzipped) state-based UI frontend library.",
   "source": "src/index.js",
   "main": "dist/minite.js",
   "module": "dist/minite.module.js",
