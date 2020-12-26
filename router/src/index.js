@@ -42,16 +42,30 @@ class Router {
     this.__routes.push({ path, component })    
   }
 
-  __mount = (view, props) => {
+  /**
+   * Render router component
+   * @param {{ view: Function, state?: Object }} component - Routed component
+   * @param {Array} params - URL Params
+   */
+  __mount = (component, params) => {
+    // Extract from routed component
+    const { view, state } = component(params)
+    
+    // Dynamic / async componoent
     if (typeof view().then === 'function') {
+      
+      // Render preloader if exists
       if (this.__preloader) {
         this.__render(this.__parentNode, this.__preloader)
       }
-      view().then(i => {
-        this.__render(this.__parentNode, i.default, props)
+      view().then(resp => {
+        this.__render(this.__parentNode, resp.default, state)
       })
+
     } else {
-      this.__render(this.__parentNode, view, props)
+
+      this.__render(this.__parentNode, view, state)
+
     }
   }
 
@@ -61,7 +75,6 @@ class Router {
       const match = current.match(path)
       if (match) {
         match.shift()
-        // console.log(component().apply({}, match));
         this.__mount(component, match)
         return match;
       }
