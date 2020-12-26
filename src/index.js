@@ -12,7 +12,7 @@ const emitter = mitt()
  * @param {HTMLElement} view - Component created by "createElement" function
  * @param {object} initState - Initial state
  */
-export const render = (root, view, initState = []) => {
+export const render = (root, view, initState = {}) => {
   
   // Initialize state
   let state = initState;
@@ -34,11 +34,14 @@ export const render = (root, view, initState = []) => {
    * Render function
    * @param {HTMLElement} tree - Rendered given Component
    */
-  const renderer = tree => {  
+  const renderer = tree => {
     const focusedId = (document.activeElement || {id:''}).id;
     const identifiedElements = Array.prototype.map.call(document.querySelectorAll('[id]'), cacheProps);
+
+    // Clear element before append
     while (root.firstChild) root.removeChild(root.firstChild);
     root.append(...Array.isArray(tree) ? tree : [tree]);
+
     identifiedElements.forEach(element => {
       const newElement = document.getElementById(element.id);
       if (newElement) {
@@ -56,5 +59,4 @@ export const render = (root, view, initState = []) => {
   })
   
   renderer(view(state, emitter.emit));
-
 }
