@@ -25,8 +25,8 @@ class Router {
   __render = null
   
   /**
-   * 
-   * @param {Object>} config - { mount, render, preloader? }
+   * Router instance
+   * @param {{ mount, render, preloader? }} config - Configuration
    */
   constructor (config) {
     if (!config.mount) throw Error('[Router] "mount" point is missing')
@@ -37,6 +37,11 @@ class Router {
     window.addEventListener('popstate', () => this.listen());
   }
 
+  /**
+   * Add route
+   * @param {String} path - URL Path
+   * @param {{ view: Function, state?: Object }} component - Routed component
+   */
   add = (path, component) => {
     path = path === '/' ? '^\/?$' : new RegExp(clearSlashes(path) + '$')
     this.__routes.push({ path, component })    
@@ -49,17 +54,20 @@ class Router {
    */
   __mount = (component, params) => {
     // Extract from routed component
-    const { view, state } = component(params)
+    const app = component(params)
+    const { view, state } = app
     
     // Dynamic / async componoent
-    if (typeof view().then === 'function') {
+    if (typeof app.then === 'function') {
       
       // Render preloader if exists
       if (this.__preloader) {
         this.__render(this.__parentNode, this.__preloader)
       }
-      view().then(resp => {
-        this.__render(this.__parentNode, resp.default, state)
+
+      app.then(resp => {
+        const { view, state } = resp.default()
+        this.__render(this.__parentNode, view, state)
       })
 
     } else {
@@ -69,6 +77,9 @@ class Router {
     }
   }
 
+  /**
+   * Handle mount on route changes
+   */
   listen = () => {
     const current = getFragment()
     this.__routes.some(({ path, component }) => {
