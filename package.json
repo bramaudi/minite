@@ -27,16 +27,17 @@
   "author": "Brama Udi <bramaudi.al@gmail.com> (http://bramaudi.my.id)",
   "license": "MIT",
   "scripts": {
-    "dev": "microbundle watch",
+    "dev": "parcel docs/test.html --port=8080 -d build",
     "build": "npm-run-all --parallel build:*",
     "build:core": "microbundle",
     "build:router": "microbundle --cwd router --name router",
     "prepublish": "npm run build"
   },
   "devDependencies": {
-    "mitt": "^2.1.0",
     "microbundle": "^0.12.4",
-    "npm-run-all": "^4.1.5"
+    "mitt": "^2.1.0",
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.4"
   },
   "files": [
     "dist",

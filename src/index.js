@@ -1,24 +1,34 @@
-export { createElement as m } from './element.js'
-import mitt from 'mitt'
+import { reducer } from '../docs/reducer.js'
+import { createElement } from './element.js'
+import pubsub from './pubsub.js'
+export const m = createElement
+
+// Global scope
+let
+  __root,
+  __view,
+  __state = {},
+  __cursor = 0
 
 /**
- * EventBus for state setter
- */
-const emitter = mitt()
-
-/**
- * 
+ * Initial render / mount
  * @param {HTMLElement} root - Parent element
  * @param {HTMLElement} view - Component created by "createElement" function
- * @param {object} initState - Initial state
  */
-export const render = (root, view, initState = {}) => {
-  
-  // Initialize state
-  let state = initState;
+export const render = (root, view) => {
+  __root = root
+  __view = view
 
-  // Clear all previous event
-  emitter.all.clear()
+  renderer(root, view());
+}
+
+/**
+ * Render function
+ * @param {HTMLElement} view - Rendered given Component
+ */
+const renderer = (root, view) => {
+  // Reset cursor after re-render
+  __cursor = 0
 
   // Get props from element to be cached
   const cacheProps = e => ({
@@ -30,33 +40,71 @@ export const render = (root, view, initState = {}) => {
     scrollLeft: e.scrollLeft
   });
 
-  /**
-   * Render function
-   * @param {HTMLElement} tree - Rendered given Component
-   */
-  const renderer = tree => {
-    const focusedId = (document.activeElement || {id:''}).id;
-    const identifiedElements = Array.prototype.map.call(document.querySelectorAll('[id]'), cacheProps);
+  const focusedId = (document.activeElement || {id:''}).id;
+  const identifiedElements = Array.prototype.map.call(document.querySelectorAll('[id]'), cacheProps);
 
-    // Clear element before append
-    while (root.firstChild) root.removeChild(root.firstChild);
-    root.append(...Array.isArray(tree) ? tree : [tree]);
+  // Clear element before append
+  while (root.firstChild) root.removeChild(root.firstChild);
+  root.append(...Array.isArray(view) ? view : [view]);
 
-    identifiedElements.forEach(element => {
-      const newElement = document.getElementById(element.id);
-      if (newElement) {
-        // Preserve input focus on re-render using id
-        if(element.id === focusedId) newElement.focus();
-        Object.assign(newElement, element);
-      }
-    });
-  };
+  identifiedElements.forEach(element => {
+    const newElement = document.getElementById(element.id);
+    if (newElement) {
+      // Preserve input focus on re-render using id
+      if(element.id === focusedId) newElement.focus();
+      Object.assign(newElement, element);
+    }
+  });
+};
 
-  // Listen state setter
-  emitter.on('*', (type, e) => {
-    state[type] = e
-    renderer(view(state, emitter.emit))
-  })
+/**
+ * State hook
+ * @param {any} initialValue - Initial state value
+ */
+export function useState(initialValue) {
+  let currentCursor = __cursor
+  __cursor++
   
-  renderer(view(state, emitter.emit));
+  const state = {}
+  state[currentCursor] = __state[currentCursor] || initialValue
+  
+  const setState = (newVal) => {
+    typeof newVal === 'function'
+    ? __state[currentCursor] = newVal(state[currentCursor]) // Use prev state in setter
+    : __state[currentCursor] = newVal
+    
+    state[currentCursor] = __state[currentCursor]
+    renderer(__root, __view())
+  }
+  
+  return [state[currentCursor], setState]
+}
+
+export const useEffect = callback => callback()
+
+export const bruh = () => 'bor'
+
+export const useReducer = (reducer) => {
+
+  let statex, listenersx = []
+
+  const getState = () => statex
+  
+  const dispatch = action => {
+    statex = reducer(statex, action)
+    console.log(listenersx);
+    listenersx.forEach(listener => listener())
+  }
+
+  const subscribe = listener => {
+    listenersx.push(listener)
+    return () => {
+      listenersx = listenersx.filter(l => l !== listener)
+    }
+  }
+
+  dispatch({})
+
+  return { getState, dispatch, subscribe }
+
 }

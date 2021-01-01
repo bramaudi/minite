@@ -14,7 +14,11 @@ function isSVG(tagName) {
  */
 function objectToStyleString(styles) {
   return Object.keys(styles)
-    .map(prop => `${prop}: ${styles[prop]}`)
+    .map(prop => {
+      // convert camelCase to kebab-case
+      const newProp = prop.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+      return `${newProp}: ${styles[prop]}`
+    })
     .join(';')
 }
 
@@ -30,10 +34,15 @@ export const createElement = function (tagName, attrs, ...children) {
   // If tagName are 'x' it became fragment
   if (tagName === 'x') return children
  
-  // Lowercasing all attrs key, onClick -> onclick
+  // Lowercasing all attribute name, onClick -> onclick
+  // Support for both class & className
   if (typeof attrs === 'object') {
-    for (const key in attrs) {
-      attrs[key.toLocaleLowerCase()] = attrs[key]
+    for (let key in attrs) {
+      const newKey = key
+        .toLocaleLowerCase()
+        .replace('class', 'className')
+      
+      attrs[newKey] = attrs[key]
     }
   }
  
