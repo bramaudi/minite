@@ -1,17 +1,15 @@
-import { m, render } from '../src/index'
-import store from './reducer'
-import Counter from './counter'
+import { m, render, useState } from '../src/index'
 
 /** @jsx m */
 /** @jsxFrag 'x' */
 const Main = () => {
-  console.log(store);
+  const [count, setCount] = useState(0)
 
   return (
     <>
       <h1>minite.js</h1>
-      <div>Count: </div>
-      <button onClick={() => setCount(1)}>+</button>
+      <div>Count: {count}</div>
+      <button onClick={() => setCount(count + 1)}>+</button>
       {/* <Counter count={count} setCount={setCount} /> */}
     </>
   )

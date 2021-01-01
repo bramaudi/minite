@@ -1,6 +1,5 @@
-import { reducer } from '../docs/reducer.js'
 import { createElement } from './element.js'
-import pubsub from './pubsub.js'
+export { useReducer } from './reducer.js'
 export const m = createElement
 
 // Global scope
@@ -80,31 +79,8 @@ export function useState(initialValue) {
   return [state[currentCursor], setState]
 }
 
+/**
+ * useEffect called on every component render
+ * @param {Function} callback 
+ */
 export const useEffect = callback => callback()
-
-export const bruh = () => 'bor'
-
-export const useReducer = (reducer) => {
-
-  let statex, listenersx = []
-
-  const getState = () => statex
-  
-  const dispatch = action => {
-    statex = reducer(statex, action)
-    console.log(listenersx);
-    listenersx.forEach(listener => listener())
-  }
-
-  const subscribe = listener => {
-    listenersx.push(listener)
-    return () => {
-      listenersx = listenersx.filter(l => l !== listener)
-    }
-  }
-
-  dispatch({})
-
-  return { getState, dispatch, subscribe }
-
-}

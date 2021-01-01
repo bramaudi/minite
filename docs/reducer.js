@@ -1,4 +1,4 @@
-import { useReducer, bruh } from '../src/index.js'
+import { useReducer } from '../src/index'
 
 const reducer = (state = 0, action) => {
 
@@ -13,9 +13,8 @@ const reducer = (state = 0, action) => {
 
 }
 
-console.log('bruh', bruh);
-// const store = useReducer(reducer)
+console.log(useReducer);
 
-// console.log('store', store);
+// const store = useReducer(reducer)
 
 export default 1
