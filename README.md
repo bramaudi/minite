@@ -1,6 +1,6 @@
 # ⏳ minite.js
 
-Tiny Javascript library (only ~1kB gzipped) for create state-based UI component with simple *reactivity* mechanism with as simple as possible API, let you start in a *minite*.
+A tiny Javascript library (around ~1kB gzipped) for create state-based UI component with simple *reactivity* power rendered on [real-dom](https://github.com/danculley/real-dom) using React-like API, let you learn & start just in a *minite*.
 
 ## Installtaion
 
@@ -15,7 +15,7 @@ import { m, render } from 'minite'
 
 HTML:
 ```html
-<script src="https://unpkg.com/minite@0.1.16/dist/minite.umd.js"></script>
+<script src="https://unpkg.com/minite@0.1.21/dist/minite.umd.js"></script>
 ```
 
 JavaScript:
@@ -33,33 +33,24 @@ HTML:
 
 JavaScript:
 ```js
-import minite from 'minite'
-const { m, render } = minite
+import { m, render, useState } from 'minite'
 
-// Define initial state
-const state = { count: 0 }
+const App = () => {
+  const [count, setCount] = useState(0)
 
-// Given parameter are used under the render function
-const App = (state, setState) => {
-  const { count } = state
-  // Tag name 'x' -> fragment, to skip element wrapping
+  // Tag name 'x' -> fragment, return childrens
   return m('x', [
     m('p', 'Count: ${count}'),
-    m('button', { onClick: () => setState('count', count + 1) }, '+1'),
-    m('button', { onClick: () => setState('count', count - 1) }, '-1'),
+    m('button', { onClick: () => setCount(count + 1) }, '+1'),
+    m('button', { onClick: () => setCount(count - 1) }, '-1'),
   ])
 }
 
 const root = document.getElementById('app')
-render(root, App, state)
+render(root, App)
 ```
 
 ## TODO
 
 - [ ] Writing documentation
 - [ ] Adding more example
-
-### Credit
-
-- [real-dom](https://github.com/danculley/real-dom) - simple dom engine
-- [mitt](https://github.com/developit/mitt) - tiny event pubsub
