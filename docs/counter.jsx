@@ -1,17 +1,15 @@
-import { m, useEvent } from '../src/index'
+import { m } from '../src/index'
+import store from './store'
 
 /** @jsx m */
 /** @jsxFrag 'x' */
-const Counter = (props) => {
-  const { count, setCount } = props
-  
+const Counter = () => {
   return (
     <div>
       <h3>Counter</h3>
-      <div>Count: {count}</div>
-      <button onClick={() => useEvent.emit('pesan', 'Sukses')}>Pesan</button>
-      <button onClick={() => setCount(count + 1)}>+</button>
-      <button onClick={() => setCount(count - 1)}>-</button>
+      <div>Count: {store.getState()}</div>
+      <button onClick={() => store.dispatch({ type: 'INCREMENT' })}>+</button>
+      <button onClick={() => store.dispatch({ type: 'DECREMENT' })}>-</button>
     </div>
   )
 }

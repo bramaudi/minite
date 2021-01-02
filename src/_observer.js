@@ -1,3 +1,5 @@
+// NOT USED
+
 const handler = function () {
 	return {
 		get: function (obj, prop) {

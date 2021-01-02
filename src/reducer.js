@@ -16,7 +16,7 @@ export const useReducer = (reducer) => {
    * @param {object} action 
    */
   const dispatch = action => {
-    statex = reducer(statex, action)
+    state = reducer(state, action)
     // console.log(listeners);
     listeners.forEach(listener => listener())
   }
@@ -36,5 +36,5 @@ export const useReducer = (reducer) => {
   dispatch({})
 
   return { getState, dispatch, subscribe }
-  
+
 }

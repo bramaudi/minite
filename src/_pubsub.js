@@ -1,3 +1,4 @@
+// NOT USED
 export default class EventBus {
 
   __eventTarget
