@@ -66,8 +66,13 @@ export const createElement = function (tagName, attrs, ...children) {
     elem.style = objectToStyleString(attrs['style'])
   }
  
+  // Prevent boolean rendered as string
+  const hideBoolean = child => {
+    return typeof child !== 'boolean'
+  }
+
   // Append childrens
-  for (const child of children) {
+  for (const child of children.filter(hideBoolean)) {
     if (Array.isArray(child)) elem.append(...child)
     else elem.append(child)
   }
