@@ -1,14 +1,16 @@
+let __state = {},
+    __cursor = 0
+
 /**
  * State hook
  * @param {any} initialValue - Initial state value
  */
 export function useState(instance, initialValue) {
 
-  let { cursor } = instance
-  const { state: __state, render, root, view } = instance
+  const { render, root, view } = instance
 
-  let currentCursor = cursor
-  cursor++
+  let currentCursor = __cursor
+  __cursor++
 
   const state = {}
   state[currentCursor] = __state[currentCursor] || initialValue
@@ -19,6 +21,8 @@ export function useState(instance, initialValue) {
       : __state[currentCursor] = newVal
     
     state[currentCursor] = __state[currentCursor]
+
+    __cursor = 0 // reset before render
     render(root, view())
   }
   

@@ -6,9 +6,7 @@ export const m = createElement
 // Global scope
 let
   __root,
-  __view,
-  __state = {},
-  __cursor = 0
+  __view
 
 /**
  * Initial render / mount
@@ -27,9 +25,6 @@ export const render = (root, view) => {
  * @param {HTMLElement} view - Rendered given Component
  */
 const renderer = (root, view) => {
-  // Reset cursor after re-render
-  __cursor = 0
-
   // Get props from element to be cached
   const cacheProps = e => ({
     id: e.id,
@@ -55,6 +50,8 @@ const renderer = (root, view) => {
       Object.assign(newElement, element);
     }
   });
+
+  return true
 };
 
 /**
@@ -63,8 +60,6 @@ const renderer = (root, view) => {
  */
 export const useState = (initialState) => stateHook(
   {
-    state: __state,
-    cursor: __cursor,
     render: renderer,
     root: __root,
     view: __view,
