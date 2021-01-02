@@ -9,38 +9,38 @@
 <body>
   <a href="./router.html">Router &raquo;</a>
   <div id="app"></div>
-  <script src="https://unpkg.com/minite@0.1.16/dist/minite.umd.js"></script>
-  <script>
-    const { m, render } = minite
-
-    const state = {
-      count: 0,
-      text: '',
-      show: false
-    }
+  <!-- <script src="../dist/minite.umd.js"></script> -->
+  <script type="module">
+    import { m, render, useState } from '../src/index.js'
 
     // 'x' => Fragment -> return children
-    const Counter = ({ count, text, show }, set) => m('x', [
-      m('h1', 'Counter'),
-      m('button', {onclick: () => set('count', count - 1)}, '-'),
-      m('span', ` ${count} `),
-      m('button', {onclick: () => set('count', count + 1)}, '+'),
+    const App = () => {
+      const [count, setCount] = useState(0)
+      const [text, setText] = useState('')
+      const [show, setShow] = useState(false)
 
-      m('h1', 'Input'),
-      m('div', `Text: "${text}"`),
-      m('input', {
-        id: 'inputText',
-        value: text,
-        oninput: e => set('text', e.target.value)
-      }),
-
-      m('h1', 'Toggle'),
-      m('button', {onclick: () => set('show', !show)}, 'Show/Hide'),
-      show ? m('div', 'Hello there!') : ''
-    ])
+      return m('x', [
+        m('h1', 'Counter'),
+        m('div', `Count: ${count}`),
+        m('button', {onclick: () => setCount(count + 1)}, '+'),
+        m('button', {onclick: () => setCount(count - 1)}, '-'),
+        m('hr'), // -----------
+        m('h1', 'Input'),
+        m('div', `Text: "${text}"`),
+        m('input', {
+          id: 'input', // Important to preserve focus
+          oninput: e => setText(e.target.value),
+          value: text,
+        }),
+        m('hr'), // -----------
+        m('h1', 'Toggle'),
+        m('button', {onclick: () => setShow(!show)}, 'Toggle show/hide'),
+        show ? m('div', 'Hello there!') : ''
+      ])
+    }
 
     const root = document.getElementById('app')
-    render(root, Counter, state)
+    render(root, App)
   </script>
 </body>
 </html>
