@@ -1,3 +1,5 @@
+import { __root, __view, render } from './render.js'
+
 let __state = {},
     __cursor = 0
 
@@ -5,9 +7,7 @@ let __state = {},
  * State hook
  * @param {any} initialValue - Initial state value
  */
-export function useState(instance, initialValue) {
-
-  const { render, root, view } = instance
+export function useState(initialValue) {
 
   let currentCursor = __cursor
   __cursor++
@@ -23,7 +23,7 @@ export function useState(instance, initialValue) {
     state[currentCursor] = __state[currentCursor]
 
     __cursor = 0 // reset before render
-    render(root, view())
+    render(__root, __view())
   }
   
   return [state[currentCursor], setState]
