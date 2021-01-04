@@ -54,25 +54,23 @@ class Router {
    */
   __mount = (component, params) => {
     // Extract from routed component
-    const app = component(params)
-    const { view, state } = app
+    const view = () => component(params)
     
     // Dynamic / async componoent
-    if (typeof app.then === 'function') {
+    if (typeof view().then === 'function') {
       
       // Render preloader if exists
       if (this.__preloader) {
         this.__render(this.__parentNode, this.__preloader)
       }
-
-      app.then(resp => {
-        const { view, state } = resp.default()
-        this.__render(this.__parentNode, view, state)
+      
+      view().then(resp => {
+        this.__render(this.__parentNode, resp.default)
       })
 
     } else {
 
-      this.__render(this.__parentNode, view, state)
+      this.__render(this.__parentNode, view)
 
     }
   }
