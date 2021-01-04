@@ -23,14 +23,8 @@ export function useState(initialValue) {
     state[currentCursor] = __state[currentCursor]
 
     __cursor = 0 // reset before render
-    render(__root, __view())
+    render(__root, __view)
   }
   
   return [state[currentCursor], setState]
 }
-
-/**
- * useEffect called on every component render
- * @param {Function} callback 
- */
-export const useEffect = callback => callback()
