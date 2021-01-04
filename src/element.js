@@ -1,3 +1,5 @@
+const randomStr = Math.random().toString(36).substr(2, 5);
+
 /**
  * Check if tag name is svg
  * @param {String} tagName
@@ -22,11 +24,20 @@ function objectToStyleString(styles) {
     .join(';')
 }
 
+
 export const createElement = function (tagName, attrs, ...children) {
 
   // Flexibility, can skip attrs and pass as child
   if (Array.isArray(attrs)) children = attrs
   else if (typeof attrs === 'string') children.push(attrs)
+
+  if (tagName === 'input' && !attrs.hasOwnProperty('id')) {
+    attrs = {
+      ...attrs,
+      // Give randomize id to preserve input focus
+      ...{ id: 'input__' + randomStr }
+    }
+  }
 
   // For re-usable / nested jsx component
   if (typeof tagName === 'function') return tagName(attrs, children)

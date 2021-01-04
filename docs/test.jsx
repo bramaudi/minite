@@ -29,7 +29,6 @@ const Main = () => {
       <h1>minite.js</h1>
       <div>Text: "{text}"</div>
       <input
-        id="inp"
         type="text"
         value={text}
         onInput={handleInput}
