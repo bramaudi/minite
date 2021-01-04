@@ -2,8 +2,8 @@ export let __root, __view
 
 /**
  * Initial render / mount
- * @param {HTMLElement} root - Parent element
- * @param {HTMLElement} view - Component created by "createElement" function
+ * @param {HTMLElement} root - Parent Node
+ * @param {Function} view - return Node by createElement
  */
 export const render = (root, view) => {
   __root = root
@@ -14,6 +14,7 @@ export const render = (root, view) => {
 
 /**
  * Render function
+ * @param {HTMLElement} root - Parent Node
  * @param {HTMLElement} view - Rendered given Component
  */
 const renderer = (root, view) => {
