@@ -1,93 +1,47 @@
-const randomStr = Math.random().toString(36).substr(2, 5);
+export const createElement = ({ tag, attrs, children }) => {
 
-/**
- * Check if tag name is svg
- * @param {String} tagName
- */
-function isSVG(tagName) {
-  const patt = new RegExp('^' + tagName + '$', 'i')
-  const SVGTags = ['path', 'svg', 'use', 'g']
-  return SVGTags.some(tag => patt.test(tag))
-}
+  const checkTag = (t) => tag === t
 
-/**
- * Inline style
- * @param {Object} styles
- */
-function objectToStyleString(styles) {
-  return Object.keys(styles)
-    .map(prop => {
-      // convert camelCase to kebab-case
-      const newProp = prop.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
-      return `${newProp}: ${styles[prop]}`
-    })
-    .join(';')
-}
+  // If tag are 'x' it became fragment
+  var el = tag === 'x'
+    ? new DocumentFragment()
+    : document.createElement(tag)
 
-
-export const createElement = function (tagName, attrs, ...children) {
-
-  // Flexibility, can skip attrs and pass as child
-  if (Array.isArray(attrs)) children = attrs
-  else if (typeof attrs === 'string') children.push(attrs)
-
-  if (tagName === 'input' && !attrs.hasOwnProperty('id')) {
-    attrs = {
-      ...attrs,
-      // Give randomize id to preserve input focus
-      ...{ id: 'input__' + randomStr }
-    }
+  // Check if tag is svg related
+  if (
+    checkTag('path') ||
+    checkTag('svg') ||
+    checkTag('use') ||
+    checkTag('g')
+  ) {
+    el = document.createElementNS('http://www.w3.org/2000/svg', tag)
   }
 
-  // For re-usable / nested jsx component
-  if (typeof tagName === 'function') return tagName(attrs, children)
-  
-  // If tagName are 'x' it became fragment
-  if (tagName === 'x') return children
- 
-  // Lowercasing all attribute name, onClick -> onclick
-  // Support for both class & className
-  if (typeof attrs === 'object') {
-    for (let key in attrs) {
-      const newKey = key
-        .toLocaleLowerCase()
-        .replace('class', 'className')
-      
-      attrs[newKey] = attrs[key]
-    }
-  }
- 
-  var elem = Object.assign(
-    document.createElement(tagName),
-    typeof attrs === 'object' ? attrs : {}
-  )
-
-  if (isSVG(tagName)) {
-    elem = document.createElementNS('http://www.w3.org/2000/svg', tagName)
-
-    for (const prop in attrs) {
-      if (attrs.hasOwnProperty(prop)) {
-        elem.setAttribute(prop, attrs[prop])
+  // el = Object.assign(el, attrs)
+  for (const prop in attrs) {
+    // Add Event Listener
+    const event = prop.match(/^on(.*)/)
+    if (event) {
+      el.addEventListener(event[1].toLowerCase(), attrs[prop])
+    } else {
+      if (tag !== 'x') {
+        el.setAttribute(prop === 'className' ? 'class' : prop, attrs[prop])
       }
     }
   }
 
-  // Apply style
-  if (attrs && attrs.hasOwnProperty('style')) {
-    elem.style = objectToStyleString(attrs['style'])
-  }
- 
-  // Prevent boolean rendered as string
-  const hideBoolean = child => {
-    return typeof child !== 'boolean'
-  }
-
-  // Append childrens
-  for (const child of children.filter(hideBoolean)) {
-    if (Array.isArray(child)) elem.append(...child)
-    else elem.append(child)
+  if (children) {
+    // Check if childrens is definitely inside array
+    children.forEach(child => {
+      if (Array.isArray(child)) {
+        children = child
+      }
+    })
+    // Append childrens
+    children.map(child => {
+      el.append(typeof child === 'object' ? createElement(child) : child)
+    })
   }
 
-  return elem
-
+  return el
 }

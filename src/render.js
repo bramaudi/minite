@@ -1,4 +1,5 @@
 export let __root, __view
+import { createElement } from './element.js';
 
 /**
  * Initial render / mount
@@ -28,12 +29,19 @@ const renderer = (root, view) => {
     scrollLeft: e.scrollLeft
   });
 
-  const focusedId = (document.activeElement || {id:''}).id;
-  const identifiedElements = Array.prototype.map.call(document.querySelectorAll('[id]'), cacheProps);
+  const identifiedElements = [];
+  const focusedId = document.activeElement.id || ''
 
+  if (focusedId) {
+    identifiedElements.push(
+      cacheProps(document.getElementById(focusedId))
+    )
+  }
+  
   // Clear element before append
   while (root.firstChild) root.removeChild(root.firstChild);
-  root.append(...Array.isArray(view) ? view : [view]);
+  // root.append(...Array.isArray(view) ? view : [view]);
+  root.appendChild(createElement(view))
 
   identifiedElements.forEach(element => {
     const newElement = document.getElementById(element.id);

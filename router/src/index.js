@@ -1,3 +1,5 @@
+import { render } from '../../src/minite.js';
+
 /**
  * Helper to trim start/end slash
  * @param {String} path 
@@ -26,13 +28,13 @@ class Router {
   
   /**
    * Router instance
-   * @param {{ mount, render, preloader? }} config - Configuration
+   * @param {{ mount, preloader? }} config - Configuration
    */
   constructor (config) {
     if (!config.mount) throw Error('[Router] "mount" point is missing')
-    if (!config.render) throw Error('[Router] "render" func is missing')
+    // if (!config.render) throw Error('[Router] "render" func is missing')
     this.__parentNode = document.querySelector(config.mount)
-    this.__render = config.render
+    this.__render = render
     if (config.preloader) this.__preloader = config.preloader
     window.addEventListener('popstate', () => this.listen());
   }
